@@ -58,15 +58,14 @@ struct fakeView: View {
     }
     
     func Dummypegs(matches: [Match]) -> some View {
-        HStack(alignment: .top){
+        HStack{
             ForEach(0..<matches.count,id: \.self) {_ in
-                Circle().frame(height: 60)
+                Circle().frame(width: 40,height: 60)
             }
-            MatchMarkers(matches:matches).frame(width: 60)
+            MatchMarkers(matches:matches).frame(width: 40,height: 60)
             
             Spacer()
         }
-        .padding()
     }
 }
 
