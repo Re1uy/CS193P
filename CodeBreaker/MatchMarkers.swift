@@ -17,15 +17,15 @@ enum Match {
 struct MatchMarkers: View {
     var matches: [Match]
     
+    var dynamicRows: [GridItem] {
+        let Maxcolumn: Int = (matches.count + 1) / 2
+        return Array(repeating: GridItem(.flexible()), count: Maxcolumn)
+    }
+    
     var body: some View {
-        HStack {
-            VStack {
-                matchMarkers(peg: 0)
-                matchMarkers(peg: 1)
-            }
-            VStack {
-                matchMarkers(peg: 2)
-                matchMarkers(peg: 3)
+        LazyVGrid(columns:dynamicRows) {
+                ForEach(matches.indices, id:\.self) { index in
+                    matchMarkers(peg: index)
             }
         }
     }
@@ -39,14 +39,37 @@ struct MatchMarkers: View {
             .aspectRatio(1, contentMode: .fit)
     }
     
+}
+
+
+
+struct fakeView: View {
+    var body: some View {
+        VStack {
+            Dummypegs(matches: [.exact, .inexact , .inexact])
+            Dummypegs(matches: [.exact, .nomatch , .nomatch])
+            Dummypegs(matches: [.exact, .exact , .inexact, .inexact])
+            Dummypegs(matches: [.exact, .exact , .inexact, .inexact, .inexact])
+            Dummypegs(matches: [.exact, .exact , .inexact, .inexact, .inexact,.exact])
+            Dummypegs(matches: [.exact, .nomatch , .nomatch, .nomatch, .nomatch,.nomatch])
+        }
+        .padding()
+        
+    }
     
-    
-    
-    
-    
+    func Dummypegs(matches: [Match]) -> some View {
+        HStack(alignment: .top){
+            ForEach(0..<matches.count,id: \.self) {_ in
+                Circle().frame(height: 60)
+            }
+            MatchMarkers(matches:matches).frame(width: 60)
+            
+            Spacer()
+        }
+        .padding()
+    }
 }
 
 #Preview {
-    MatchMarkers(matches: [.exact,.exact,.inexact,.exact]
-    )
+    fakeView()
 }
