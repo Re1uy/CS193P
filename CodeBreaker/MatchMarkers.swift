@@ -17,28 +17,32 @@ enum Match {
 struct MatchMarkers: View {
     var matches: [Match]
     
-    var dynamicRows: [GridItem] {
-        let Maxcolumn: Int = (matches.count + 1) / 2
-        return Array(repeating: GridItem(.flexible()), count: Maxcolumn)
-    }
+    var capacity: Int {
+            matches.count > 4 ? 6 : 4
+        }
+
     
     var body: some View {
-        LazyVGrid(columns:dynamicRows) {
-                ForEach(matches.indices, id:\.self) { index in
-                    matchMarkers(peg: index)
+        let columnCount = (capacity + 1) / 2
+                
+                HStack {
+                    ForEach(0..<columnCount, id: \.self) { column in
+                        VStack {
+                            matchMarkers(peg: column * 2)
+                            matchMarkers(peg: column * 2 + 1)
+                        }
+                    }
+                }
             }
-        }
-    }
     
     func matchMarkers(peg: Int) -> some View {
-        let exactCount: Int = matches.count(where: { match in match == .exact})
-        let foundCount: Int = matches.count(where: { match in match != .nomatch})
+        let exactCount: Int = matches.count { $0 == .exact}
+        let foundCount: Int = matches.count { $0 != .nomatch}
         return Circle()
             .fill(exactCount > peg ? Color.primary : Color.clear)
             .strokeBorder(foundCount > peg ? Color.primary : Color.clear, lineWidth: 2)
             .aspectRatio(1, contentMode: .fit)
     }
-    
 }
 
 
