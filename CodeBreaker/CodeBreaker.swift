@@ -7,24 +7,56 @@
 
 import SwiftUI
 
-typealias Peg = Color
+typealias Peg = String
 
 struct CodeBreaker {
     var masterCode: Code = Code(kind: .master)
     var guess: Code = Code(kind: .guess)
     var attempts: [Code] = []
-    let pegChoices: [Peg]
+    var ColorChoice: [Peg]
+    var EmojiChoice: [Peg]
+    var pegChoices: [Peg]
+    let SupportColor: [Peg] = ["red", "green", "blue", "yellow", "brown", "orange"
+                               , "pink", "black", "white", "silver"]
+    static let NumberChoices = [3, 4, 5, 6]
+    static var pegNumber: Int = CodeBreaker.NumberChoices.randomElement() ?? 4
     
-    init(pegChoices: [Peg] = [.red, .green, .blue, .yellow]) {
-        self.pegChoices = pegChoices
+    init(ColorChoice: [Peg] = ["red", "green", "blue", "yellow"], EmojiChoice:[Peg] = ["🌍", "🐔", "😊", "🤔"]) {
+        self.ColorChoice = ColorChoice
+        self.EmojiChoice = EmojiChoice
+        self.pegChoices = Bool.random() && CodeBreaker.isColor(in: ColorChoice, check: SupportColor) ? ColorChoice : EmojiChoice
         masterCode.randomize(from: pegChoices)
         print(masterCode)
+        print(pegChoices)
     }
     
     mutating func attemptGuess() {
         var attempt = guess
         attempt.kind = .attempt(guess.match(against: masterCode))
         attempts.append(attempt)
+    }
+    
+    static func isColor(in Choices: [Peg], check Support: [Peg]) -> Bool {
+        !Choices.contains{ color in
+            !Support.contains(color)
+        }
+    }
+    
+    func AllowGuess() -> Bool {
+        !(attempts.contains { attempt in
+            attempt.pegs == guess.pegs})
+        &&
+        guess.pegs.contains{peg in pegChoices.contains(peg)}
+    }
+    
+    mutating func restartgame() {
+        CodeBreaker.pegNumber = CodeBreaker.NumberChoices.randomElement() ?? 4
+        guess.pegs = Array(repeating: Code.missing, count:CodeBreaker.pegNumber)
+        attempts = []
+        masterCode = Code(kind: .master)
+        pegChoices = Bool.random() && CodeBreaker.isColor(in: ColorChoice, check: SupportColor) ? ColorChoice : EmojiChoice
+        masterCode.randomize(from: pegChoices)
+        print(masterCode)
     }
     
     mutating func changeGuessPeg(at index: Int) {
@@ -40,9 +72,9 @@ struct CodeBreaker {
 
 struct Code {
     var kind: Kind
-    var pegs: [Peg] = Array(repeating: Code.missing, count: 4)
+    var pegs: [Peg] = Array(repeating: Code.missing, count: CodeBreaker.pegNumber)
     
-    static let missing: Peg = .clear
+    static let missing: Peg = "clear"
     
     enum Kind: Equatable{
         case master
@@ -52,8 +84,10 @@ struct Code {
     }
     
     mutating func randomize(from pegChoices: [Peg]) {
-        for index in pegChoices.indices {
+        var index : Int = 0
+        while index < CodeBreaker.pegNumber {
             pegs[index] = pegChoices.randomElement() ?? Code.missing
+            index += 1
         }
     }
     
