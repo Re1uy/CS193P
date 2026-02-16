@@ -15,13 +15,14 @@ enum Match {
 }
 
 struct MatchMarkers: View {
-    var matches: [Match]
+    //MARK: Data in
+    let matches: [Match]
     
     var capacity: Int {
             matches.count > 4 ? 6 : 4
         }
 
-    
+    //MARK - Body
     var body: some View {
         let columnCount = (capacity + 1) / 2
                 
