@@ -25,7 +25,12 @@ struct GameChooser: View {
                     }
                 }
                 .onDelete{ offsets in
-                    games.remove(atOffsets: offsets)
+                    for index in offsets {
+                    let gameToDelete = sortedGames[index]
+                    if let originalIndex = games.firstIndex(where: { $0.id == gameToDelete.id }) {
+                        games.remove(at: originalIndex)
+                    }
+                }
                 }
                 .onMove{ offsets, destination in
                     games.move(fromOffsets: offsets, toOffset:destination)
