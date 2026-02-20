@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXFileReference section */
-		E5B62E282F43944400901AE5 /* WordBreaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WordBreaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E5B62E282F43944400901AE5 /* WordBreaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = WordBreaker.app; path = /Users/misaka/Desktop/CodeBreaker/WordBreaker/build/Debug/WordBreaker.app; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -33,16 +33,7 @@
 			isa = PBXGroup;
 			children = (
 				E5B62E2A2F43944400901AE5 /* WordBreaker */,
-				E5B62E292F43944400901AE5 /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		E5B62E292F43944400901AE5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E5B62E282F43944400901AE5 /* WordBreaker.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -95,7 +86,7 @@
 			mainGroup = E5B62E1F2F43944400901AE5;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = E5B62E292F43944400901AE5 /* Products */;
+			productRefGroup = E5B62E1F2F43944400901AE5;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

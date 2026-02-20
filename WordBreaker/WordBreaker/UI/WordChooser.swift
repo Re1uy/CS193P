@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WordChooser: View {
     let choices: [Character]
-    let onChoose: ((Character) -> Void)?
+    var onChoose: ((Character) -> Void)?
     
     var body: some View {
         HStack{
@@ -22,6 +22,7 @@ struct WordChooser: View {
                         .frame(width: 32, height: 34)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10).stroke(lineWidth: 2)
+                        
                         )
                 }
             }

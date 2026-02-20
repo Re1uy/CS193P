@@ -11,9 +11,8 @@ struct WordsView: View {
     @Environment(\.words) var words
     
     @State private var selection: Int = 0
-    @State private var game = WordBreaker()
-    
-    @State private var length: Int = 6
+    let game: WordBreaker
+
 
     var body: some View {
         VStack{
@@ -23,8 +22,10 @@ struct WordsView: View {
                 matches: []
             )
             .task(id: words.count) {
-                guard words.count > 0 else { return }
-                game = WordBreaker(masterCode: words.random(length: length) ?? "none")
+                        guard words.count > 0 else { return }
+                if game.masterCode.contains(" ") || game.masterCode == "NONE" {
+                    game.restartGame(with: words.random(length: game.length) ?? "none")
+                }
             }
             ScrollView{
                 if !game.isOver {
@@ -54,26 +55,9 @@ struct WordsView: View {
             if !game.isOver {
                 HStack {
                     guessButton
-                    Spacer()
-                    restartButton
-                }.padding(.horizontal, 24)
-            } else {
-                HStack {
-                    Spacer()
-                    restartButton
-                    Spacer()
-                }.padding(.horizontal, 24)
-                .animation(.easeInOut, value: game.isOver)
+                }
             }
         }
-    }
-    
-    func newGame() {
-        length = WordBreaker.NumberChoices.randomElement() ?? 4
-        if let w = words.random(length: length) {
-            game = WordBreaker(masterCode: w)
-        }
-        selection = 0
     }
     
     var guessButton: some View {
@@ -84,14 +68,6 @@ struct WordsView: View {
                     selection = 0
                 }
             }
-        }
-        .font(.system(size: GuessButton.maximumFontSize))
-        .minimumScaleFactor(GuessButton.scaleFactor)
-    }
-    
-    var restartButton: some View {
-        Button("restart") {
-            newGame()
         }
         .font(.system(size: GuessButton.maximumFontSize))
         .minimumScaleFactor(GuessButton.scaleFactor)
@@ -169,5 +145,5 @@ extension Color {
     }
 }
 #Preview {
-    WordsView()
+    WordsView(game: WordBreaker())
 }

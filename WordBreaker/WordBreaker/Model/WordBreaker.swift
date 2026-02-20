@@ -12,20 +12,27 @@ import UIKit
 
 typealias Word = String
 
-struct WordBreaker {
+@Observable class WordBreaker {
     
+    let id = UUID()
+    var length: Int
+    var name:String
     var masterCode: Word = "none"
-    var guess: [Character]
+    var guess: [Character] = []
     var guessWord: Word { String(guess) }
     var attempts: [Attempt] = []
     static let NumberChoices = [3, 4, 5, 6]
+    
+    var lastPlayed: Date = Date()
    
-    init(masterCode: Word = "none") {
+    init(name: String = "Word Breaker", masterCode: Word = "none",length: Int = 4) {
+        self.name = name
         self.masterCode = masterCode.uppercased()
+        self.length = length
         self.guess = Array(repeating: " ", count: self.masterCode.count)
     }
     
-    mutating func setGuessPeg(_ letter: Character, at index: Int) {
+    func setGuessPeg(_ letter: Character, at index: Int) {
         guard guess.indices.contains(index) else {return}
         guess[index] = letter
     }
@@ -38,13 +45,14 @@ struct WordBreaker {
         UITextChecker().isAWord(guessWord.lowercased())
     }
     
-    mutating func attemptGuess() {
+    func attemptGuess() {
         let attemptword = guessWord
         attempts.append(Attempt(word: attemptword, matches:matches(for: attemptword)))
+        lastPlayed = Date()
         reset()
     }
     
-    mutating func reset() {
+    func reset() {
         guess = Array(repeating: " ", count: masterCode.count)
     }
     
@@ -69,6 +77,24 @@ struct WordBreaker {
             }
         }
         return results
+    }
+    
+    func restartGame(with newCode: String) {
+            self.masterCode = newCode.uppercased()
+            self.length = newCode.count
+            self.attempts = []
+            self.reset()      
+        }
+    
+}
+
+extension WordBreaker: Identifiable, Hashable, Equatable {
+    static func == (lhs: WordBreaker, rhs: WordBreaker) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
 
