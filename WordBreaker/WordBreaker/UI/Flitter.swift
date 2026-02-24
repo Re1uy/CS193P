@@ -7,12 +7,30 @@
 
 import SwiftUI
 
-struct Flitter: View {
+struct Filter: View {
+    @Binding var selectedFilter: GameList.GameFilter
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            Form {
+                Picker("Game Status", selection: $selectedFilter) {
+                    ForEach(GameList.GameFilter.allCases) { filter in
+                        Text(filter.rawValue).tag(filter)
+                    }
+                }
+                .pickerStyle(.inline)
+            }
+            .navigationTitle("Filter Options")
+            .toolbar {
+                Button("Done") {
+                    dismiss()
+                }
+            }
+        }
     }
 }
 
 #Preview {
-    Flitter()
+    Filter(selectedFilter: .constant(.all))
 }

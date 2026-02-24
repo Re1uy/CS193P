@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct WordBreakerApp: App {
@@ -13,5 +14,6 @@ struct WordBreakerApp: App {
         WindowGroup {
             GameChooser()
         }
+        .modelContainer(for: WordBreaker.self)
     }
 }

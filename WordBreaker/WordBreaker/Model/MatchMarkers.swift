@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-enum Match {
+enum Match: String, Hashable, Equatable, Codable {
     case nomatch
     case exact
     case inexact

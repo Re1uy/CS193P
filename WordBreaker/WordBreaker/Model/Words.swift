@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SwiftData
 
 extension EnvironmentValues {
     @Entry var words = Words.shared
 }
 
-@Observable
+@Model
 class Words {
     private var words = Dictionary<Int, Set<String>>()
     
